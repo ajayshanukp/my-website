@@ -1,0 +1,13 @@
+{
+  "name": "ajayshanukp-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio of Ajay Shanu KP",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --host 0.0.0.0",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^8.1.5"
+  }
+}
