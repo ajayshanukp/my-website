@@ -4408,15 +4408,20 @@
       }
     }
 
-    async function loadConfigFromFirestore() {
+    let unsubscribeConfig = null;
+    function loadConfigFromFirestore() {
       if (!FIREBASE_ENABLED || !firebaseDb) return;
       try {
-        const doc = await firebaseDb.collection('portfolio').doc('config').get();
-        if (doc.exists) {
-          CONFIG = doc.data();
-          localStorage.setItem('pro_portfolio_config', JSON.stringify(CONFIG));
-          renderApp();
-        }
+        if (unsubscribeConfig) unsubscribeConfig();
+        unsubscribeConfig = firebaseDb.collection('portfolio').doc('config').onSnapshot((doc) => {
+          if (doc.exists) {
+            CONFIG = doc.data();
+            localStorage.setItem('pro_portfolio_config', JSON.stringify(CONFIG));
+            renderApp();
+          }
+        }, (e) => {
+          console.warn('Firestore real-time update error:', e.message);
+        });
       } catch (e) {
         console.warn('Firestore load skipped, using local cache:', e.message);
       }
